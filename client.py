@@ -8,6 +8,12 @@ GAME_STARTING = "game starting"
 WAITING = "waiting for second player"
 WIN = "win"
 LOSE = "lose"
+CONNECTION_LOST_TO_SERVER = "Connection has been lost to the server"
+COULD_NOT_CONNECT = "Could not connect to Server!"
+CONNECTED_TO_SERVER = "Connected to Server!"
+
+INPUT_INT_ERROR = "Please provide an integer!"
+INPUT_RANGE_ERROR = "Please provide a number between 1-9"
 
 class Client:
     def __init__(self):
@@ -29,15 +35,15 @@ class Client:
         try:
             self.sock.connect(self.server_address)
         except ConnectionRefusedError:
-            return "Could not connect to Server!"
-        return "Connected to Server!"
+            return COULD_NOT_CONNECT
+        return CONNECTED_TO_SERVER
 
     def wait_for_server(self):
         while True:
             try:
                 data = self.sock.recv(1024).decode()
             except (ConnectionError, OSError):
-                return "Connection has been lost to the server"
+                return CONNECTION_LOST_TO_SERVER
             if data == WAITING:
                 print(WAITING)
             elif data == GAME_STARTING:
@@ -77,12 +83,12 @@ class Client:
                     try:
                        col = int(user_input)
                     except ValueError:
-                        print("Please provide an integer!")
+                        print(INPUT_INT_ERROR)
                         continue
                     if col in range(1, 10):
                         valid_input = True
                     else:
-                        print("Please provide a number between 1-9")
+                        print(INPUT_RANGE_ERROR)
                 self.sock.sendall(user_input.encode())
 
             if WIN in data:
@@ -100,10 +106,10 @@ if __name__ == "__main__":
     c.set_player_name()
     server_status = c.connect_to_server()
     print(server_status)
-    if server_status == "Could not connect to Server!":
+    if server_status == COULD_NOT_CONNECT:
         pass
     else:
         server_status = c.wait_for_server()
         print(server_status)
-        if server_status != "Connection has been lost to the server":
+        if server_status != CONNECTION_LOST_TO_SERVER:
             c.run()

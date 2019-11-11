@@ -15,6 +15,8 @@ STAR = "*"
 DISC_X = "x"
 DISC_O = "o"
 
+CONNECTION_LOSS_WIN = "connection loss"
+
 class Server:
     
     def __init__(self):
@@ -87,7 +89,7 @@ class Server:
         message = {"lose": None}
         pickled_lose = pickle.dumps(message)
         # If the reason is a disconnect win
-        if reason == "connection loss":
+        if reason == CONNECTION_LOSS_WIN:
             for index in range(len(self.players)):
                 player = self.get_player(index)
                 try:
@@ -121,7 +123,7 @@ class Server:
                 conn.send(pickled_message)
             except ConnectionResetError:
                 print("Error sending data to clients")
-                self.win_message("connection loss")
+                self.win_message(CONNECTION_LOSS_WIN)
                 break
 
             # Receive input column from player
@@ -129,10 +131,10 @@ class Server:
                 input_column = conn.recv(1024)
             except ConnectionResetError:
                 print("Error receiving data from clients")
-                self.win_message("connection loss")
+                self.win_message(CONNECTION_LOSS_WIN)
                 break
             if not input_column:
-                self.win_message("connection loss")
+                self.win_message(CONNECTION_LOSS_WIN)
                 break
             input_column = int(input_column.decode())
             
