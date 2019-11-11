@@ -37,12 +37,9 @@ class Server:
         try:
             self.sock.bind(self.server_address)
             self.sock.listen(CONNECTIONS_ALLOWED)
-        except error:
+        except ConnectionResetError:
             print(error)
             exit(1)
-
-    def shut_down_server(self):
-        self.sock.close()
 
     def get_player(self, index):
         return self.players[index]
@@ -72,7 +69,7 @@ class Server:
                     player_two = Player(2, DISC_X, connection)
                     self.add_player(player_two)
                     break
-            except error:
+            except ConnectionResetError:
                 print("Error setting up game")
                 exit(1)
 
@@ -80,7 +77,7 @@ class Server:
             player = self.get_player(index)
             try:
                 player.connection.sendall(GAME_STARTING_ENCODED)
-            except error:
+            except ConnectionResetError:
                 print("Error sending data to clients")
                 exit(1)
 
@@ -95,9 +92,8 @@ class Server:
                 player = self.get_player(index)
                 try:
                     player.connection.send(pickled_win)
-                except error:
+                except ConnectionResetError:
                     print("Error sending data to clients due to connection loss")
-                    exit(1)
         else:
             try:
                 winner = self.get_current_player()
@@ -105,9 +101,8 @@ class Server:
                 self.set_turn()
                 loser = self.get_current_player()
                 loser.get_connection().send(pickled_lose)
-            except error:
+            except ConnectionResetError:
                 print("Error sending data to clients")
-                exit(1)
 
     def close_client_connections(self):
         for index in range(len(self.players)):
@@ -124,7 +119,7 @@ class Server:
             pickled_message = pickle.dumps(message)
             try:
                 conn.send(pickled_message)
-            except error:
+            except ConnectionResetError:
                 print("Error sending data to clients")
                 self.win_message("connection loss")
                 break
@@ -132,7 +127,7 @@ class Server:
             # Receive input column from player
             try:
                 input_column = conn.recv(1024)
-            except error:
+            except ConnectionResetError:
                 print("Error receiving data from clients")
                 self.win_message("connection loss")
                 break
