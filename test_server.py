@@ -33,7 +33,6 @@ class TestServer(unittest.TestCase):
 
     @classmethod
     def tearDownClass(self):
-        self.server.shut_down_server()
         self.player_socket.close()
         
 if __name__ == '__main__':
