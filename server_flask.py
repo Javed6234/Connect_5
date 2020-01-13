@@ -76,6 +76,7 @@ def check_turn():
     board = game['board']
 
     if game['winner']:
+        del players[name]
         return jsonify(win=game['winner'])
 
     turn_index = game['turn']
