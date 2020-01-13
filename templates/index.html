@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+    <form method="post">
+        <input type=text name=username>
+        <input type=submit value=Start Game>
+        {% if message != None %}
+        <p>{{ message }}</p>
+        {% endif %}
+    </form>
+</body>
+</html>

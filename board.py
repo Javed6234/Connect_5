@@ -2,7 +2,7 @@ from player import Player
 
 ROWS = 6
 COLUMNS = 9
-NUM_TO_CONNECT = 5
+NUM_TO_CONNECT = 3
 STAR = "*"
 
 
@@ -10,11 +10,11 @@ class Board:
     def __init__(self):
         self.board = [[STAR for i in range(COLUMNS)] for j in range(ROWS)]
         
-    def add_disc(self, col, player):
+    def add_disc(self, col, player_disc):
         # Search up the column from (ROWS - 1) to 0
         for row in range(ROWS - 1, -1, -1):
             if self.board[row][col - 1] == STAR:
-               self.board[row][col - 1] = player.get_disc()
+               self.board[row][col - 1] = player_disc
                print(self)
                return True
         return False
