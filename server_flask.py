@@ -72,6 +72,9 @@ def create_game(player, other_player):
 def check_turn():
     name = request.args.get('username')
     game_id = request.args.get('game_id')
+    if game_id not in games:
+        return jsonify(error='game_id does not exist!'), 404
+
     game = games[game_id]
     board = game['board']
 
@@ -90,6 +93,9 @@ def play():
     name = request.json['username']
     game_id = request.json['game_id']
     input = request.json['input']
+    if game_id not in games:
+        return jsonify(error='game_id does not exist!'), 404
+
     game = games[game_id]
     board = game['board']
 

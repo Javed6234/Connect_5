@@ -30,7 +30,7 @@ class TestBoard(unittest.TestCase):
                           ['*', '*', '*', '*', '*', '*', '*', '*', '*'],
                           ['*', '*', 'o', '*', '*', '*', '*', '*', '*']]
         
-        self.board.add_disc(3, self.player)
+        self.board.add_disc(3, self.player.get_disc())
         self.assertTrue(self.board.board == test_add_board)
 
     def test_check_horizontal_win(self):

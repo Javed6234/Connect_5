@@ -2,7 +2,7 @@ from player import Player
 
 ROWS = 6
 COLUMNS = 9
-NUM_TO_CONNECT = 3
+NUM_TO_CONNECT = 5
 STAR = "*"
 
 
